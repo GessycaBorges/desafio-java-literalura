@@ -6,7 +6,7 @@ import com.alura.literalura.model.Livro;
 import com.alura.literalura.model.RespostaLivros;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverteDados;
-import com.alura.literalura.service.LivroService;
+import com.alura.literalura.service.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,11 +21,12 @@ public class Principal {
     private final String ENDERECO = "https://gutendex.com/books/";
 
     private List<Livro> livros = new ArrayList<>();
+    private List<Autor> autores = new ArrayList<>();
 
-    private final LivroService livroService;
+    private final Service service;
 
-    public Principal(LivroService livroService) {
-        this.livroService = livroService;
+    public Principal(Service livroService) {
+        this.service = livroService;
     }
 
     public void exibeMenu() {
@@ -75,9 +76,9 @@ public class Principal {
 
     private void buscarLivroPeloTitulo() {
         DadosLivro dados = getDadosLivro();
-        Autor autor = livroService.buscarAutor(dados.autor().get(0));
-        Livro livro = livroService.buscarLivro(dados);
-        livroService.salvarLivro(livro, autor);
+        Autor autor = service.buscarAutor(dados.autor().get(0));
+        Livro livro = service.buscarLivro(dados);
+        service.salvarLivro(livro, autor);
         System.out.println(livro);
     }
 
@@ -96,13 +97,17 @@ public class Principal {
     }
 
     private void listarLivrosRegistrados() {
-        livros = livroService.listarLivros();
+        livros = service.listarLivros();
         livros.stream()
                 .sorted(Comparator.comparing(Livro::getTitulo))
                 .forEach(System.out::println);
     }
 
     private void listarAutoresRegistrados() {
+        autores = service.listarAutores();
+        autores.stream()
+                .sorted(Comparator.comparing(Autor::getNome))
+                .forEach(System.out::println);
     }
 
     private void listarAutoresVivosPorAno() {

@@ -7,13 +7,12 @@ import com.alura.literalura.model.Livro;
 import com.alura.literalura.repository.AutorRepository;
 import com.alura.literalura.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class LivroService {
+@org.springframework.stereotype.Service
+public class Service {
 
     @Autowired
     private AutorRepository autorRepository;
@@ -23,19 +22,16 @@ public class LivroService {
 
     public Livro salvarLivro(Livro livro, Autor autor) {
         Optional<Autor> autorExistente = autorRepository.findByNome(autor.getNome());
-        Autor autorCadastro;
-        if (autorExistente.isPresent()) {
-            autorCadastro = autorExistente.get();
-        } else {
-            autorCadastro = autor;
-            autorRepository.save(autorCadastro);
-        }
+        Autor autorCadastro = autorExistente.orElseGet(() -> autorRepository.save(autor));
+
         livro.setAutor(autorCadastro);
 
-        Livro livroCadastro;
+        if (livro.getId() == null) {
+            return livroRepository.save(livro);
+        }
+
         Optional<Livro> livroExistente = livroRepository.findById(livro.getId());
-        livroCadastro = livroExistente.orElseGet(() -> livroRepository.save(livro));
-        return livroCadastro;
+        return livroExistente.orElseGet(() -> livroRepository.save(livro));
     }
 
     public Livro buscarLivro (DadosLivro dadosLivro) {
@@ -50,5 +46,9 @@ public class LivroService {
 
     public List<Livro> listarLivros() {
         return livroRepository.findAll();
+    }
+
+    public List<Autor> listarAutores() {
+        return autorRepository.findAll();
     }
 }
