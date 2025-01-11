@@ -1,9 +1,6 @@
 package com.alura.literalura.service;
 
-import com.alura.literalura.model.Autor;
-import com.alura.literalura.model.DadosAutor;
-import com.alura.literalura.model.DadosLivro;
-import com.alura.literalura.model.Livro;
+import com.alura.literalura.model.*;
 import com.alura.literalura.repository.AutorRepository;
 import com.alura.literalura.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +47,13 @@ public class Service {
 
     public List<Autor> listarAutores() {
         return autorRepository.findAll();
+    }
+
+    public List<Autor> listarAutoresVivosPorAno(String ano) {
+        return autorRepository.findByVivosPorAno(ano);
+    }
+
+    public List<Livro> listarLivrosPorIdioma(String idioma) {
+        return livroRepository.findByIdioma(Idioma.valueOf(idioma));
     }
 }

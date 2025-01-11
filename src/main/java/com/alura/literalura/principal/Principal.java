@@ -1,9 +1,6 @@
 package com.alura.literalura.principal;
 
-import com.alura.literalura.model.Autor;
-import com.alura.literalura.model.DadosLivro;
-import com.alura.literalura.model.Livro;
-import com.alura.literalura.model.RespostaLivros;
+import com.alura.literalura.model.*;
 import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverteDados;
 import com.alura.literalura.service.Service;
@@ -33,7 +30,6 @@ public class Principal {
         var opcao = -1;
         while (opcao !=0) {
             var menu = """
-                    
                     Escolha o número de sua opção:
                     
                     1 - Buscar livro pelo título
@@ -98,22 +94,44 @@ public class Principal {
 
     private void listarLivrosRegistrados() {
         livros = service.listarLivros();
+        this.imprimirLivros(livros);
+    }
+
+    private void listarAutoresRegistrados() {
+        autores = service.listarAutores();
+        this.imprimirAutores(autores);
+    }
+
+    private void listarAutoresVivosPorAno() {
+        System.out.println("\nDigite um ano para busca");
+        var ano = leitura.next();
+        autores = service.listarAutoresVivosPorAno(ano);
+        this.imprimirAutores(autores);
+    }
+
+    private void listarLivrosPorIdioma() {
+        System.out.println("""
+                Digite o idioma para busca dentre as opções:
+                    es - Espanhol
+                    en - Inglês
+                    fr - Francês
+                    pt - Português
+                """);
+        var idioma = leitura.next();
+        livros = service.listarLivrosPorIdioma(idioma);
+        this.imprimirLivros(livros);
+    }
+
+    private void imprimirLivros(List<Livro> livros){
         livros.stream()
                 .sorted(Comparator.comparing(Livro::getTitulo))
                 .forEach(System.out::println);
     }
 
-    private void listarAutoresRegistrados() {
-        autores = service.listarAutores();
+    private void imprimirAutores(List<Autor> autores){
         autores.stream()
                 .sorted(Comparator.comparing(Autor::getNome))
                 .forEach(System.out::println);
-    }
-
-    private void listarAutoresVivosPorAno() {
-    }
-
-    private void listarLivrosPorIdioma() {
     }
 
 }
