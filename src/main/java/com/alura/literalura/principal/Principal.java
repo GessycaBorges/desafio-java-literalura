@@ -8,6 +8,9 @@ import com.alura.literalura.service.ConsumoApi;
 import com.alura.literalura.service.ConverteDados;
 import com.alura.literalura.service.LivroService;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
@@ -16,6 +19,8 @@ public class Principal {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://gutendex.com/books/";
+
+    private List<Livro> livros = new ArrayList<>();
 
     private final LivroService livroService;
 
@@ -91,6 +96,10 @@ public class Principal {
     }
 
     private void listarLivrosRegistrados() {
+        livros = livroService.listarLivros();
+        livros.stream()
+                .sorted(Comparator.comparing(Livro::getTitulo))
+                .forEach(System.out::println);
     }
 
     private void listarAutoresRegistrados() {

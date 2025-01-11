@@ -9,6 +9,7 @@ import com.alura.literalura.repository.LivroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,5 +46,9 @@ public class LivroService {
     public Autor buscarAutor(DadosAutor dadosAutor) {
         return autorRepository.findByNome(dadosAutor.nome())
                 .orElseGet(() -> new Autor(dadosAutor));
+    }
+
+    public List<Livro> listarLivros() {
+        return livroRepository.findAll();
     }
 }
